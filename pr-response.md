@@ -98,3 +98,9 @@ This pull request completes the CineLog watchlist feature. Users can add films t
    curl -X POST http://127.0.0.1:5000/watchlist/<user_id>/add \
      -H "Content-Type: application/json" \
      -d '{"film_id": "<film_uuid>"}'
+
+## Commit History Screenshot
+
+Final commit history after interactive rebase:
+
+![Git Log](git-log-screenshot.png)
