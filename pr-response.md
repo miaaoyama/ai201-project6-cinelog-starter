@@ -64,16 +64,37 @@ I agreed with the reviewer's suggestion because it provides a better user experi
 ## Comment 6 — Rebase
 
 **What conflicted:**
-To be completed after rebasing onto the updated `main` branch.
+The updated `main` branch migrated `Film.id` and collection film references from integers to UUID strings. During the rebase, the watchlist feature’s model needed to be restored and adapted to the new UUID data model.
 
 **How I resolved it:**
-To be completed after rebasing.
+I restored `WatchlistEntry` in `models.py`, changed its `film_id` column to `db.String(36)`, and updated the watchlist service documentation, route documentation, and nonexistent-film test to use UUID strings. Git skipped my `.gitignore` commit because the equivalent change was already present on `main`.
 
 **How I verified no conflict remains:**
-To be completed after rebasing.
+I ran the full test suite successfully, confirmed the working tree was clean, and ran `git log --merges origin/main..HEAD`, which returned no merge commits.
 
 ---
 
 ## PR Description
 
-*To be completed after all changes are finished and the rebase is complete.*
+### Overview
+
+This pull request completes the CineLog watchlist feature. Users can add films to a watchlist, retrieve their saved films, and receive clear errors when a film does not exist or has already been added. The implementation follows the existing collection-service patterns and uses UUID film identifiers after rebasing onto the updated `main` branch.
+
+### Design Decisions
+
+**Default visibility:** I kept `public=True` as the default because CineLog is designed as a social film-tracking platform where public watchlists support discovery and sharing. The tradeoff is that this default is less privacy-protective, so a future version should allow callers or users to explicitly select visibility.
+
+**Sort order:** I changed watchlists from alphabetical ordering to date-added ordering, newest first. Recently saved films are more likely to be immediately relevant to users, and this behavior is consistent with the existing collection feature.
+
+### Manual Testing
+
+1. Create and activate the virtual environment.
+2. Install dependencies with `pip install -r requirements.txt`.
+3. Start the application with `python app.py`.
+4. Create or obtain a valid user ID and film UUID.
+5. Add a film with:
+
+   ```bash
+   curl -X POST http://127.0.0.1:5000/watchlist/<user_id>/add \
+     -H "Content-Type: application/json" \
+     -d '{"film_id": "<film_uuid>"}'
