@@ -21,7 +21,7 @@ def add_to_watchlist(user_id, film_id):
 
     Args:
         user_id (str): UUID of the user.
-        film_id (int): ID of the film. This will be updated to UUID after rebasing.
+        film_id (str): UUID of the film.
 
     Returns:
         WatchlistEntry: The newly created entry.
